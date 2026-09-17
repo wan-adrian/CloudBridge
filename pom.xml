@@ -9,11 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <maven.compiler.proc>full</maven.compiler.proc>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <version.waterdogpe>2.0.3-SNAPSHOT</version.waterdogpe>
+        <version.waterdogpe>2.0.4-SNAPSHOT</version.waterdogpe>
         <version.powernukkitx>nightly-SNAPSHOT</version.powernukkitx>
         <version.nukkit>1.0-SNAPSHOT</version.nukkit>
     </properties>
@@ -64,7 +65,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
+            <version>1.18.42</version>
             <scope>compile</scope>
         </dependency>
 
@@ -109,6 +110,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

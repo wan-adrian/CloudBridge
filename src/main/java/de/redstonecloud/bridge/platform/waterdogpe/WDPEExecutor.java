@@ -2,24 +2,41 @@ package de.redstonecloud.bridge.platform.waterdogpe;
 
 import com.google.common.net.HostAndPort;
 import de.redstonecloud.api.components.ICloudPlayer;
+import de.redstonecloud.bridge.cloudinterface.CloudInterface;
 import de.redstonecloud.bridge.cloudinterface.components.BridgeExecutor;
 import de.redstonecloud.bridge.cloudinterface.components.BridgeServer;
 import dev.waterdog.waterdogpe.ProxyServer;
+import dev.waterdog.waterdogpe.network.serverinfo.AutoServerInfo;
 import dev.waterdog.waterdogpe.network.serverinfo.BedrockServerInfo;
+import dev.waterdog.waterdogpe.network.serverinfo.NetherNetServerInfo;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 import dev.waterdog.waterdogpe.scheduler.Task;
 import dev.waterdog.waterdogpe.utils.types.TextContainer;
 
 import java.net.InetSocketAddress;
+import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class WDPEExecutor implements BridgeExecutor {
     private static ProxyServer server = ProxyServer.getInstance();
 
     public void addServer(String name, HostAndPort address) {
-        server.registerServerInfo(new BedrockServerInfo(name, new InetSocketAddress(address.getHost(), address.getPort()), new InetSocketAddress(address.getHost(), address.getPort())));
+        InetSocketAddress socketAddress = new InetSocketAddress(address.getHost(), address.getPort());
+        server.registerServerInfo(createServerInfo(name, socketAddress));
+    }
+
+    private ServerInfo createServerInfo(String name, InetSocketAddress address) {
+        String transport = CloudInterface.getBridgeConfig().has("downstream_transport")
+                ? CloudInterface.getBridgeConfig().get("downstream_transport").getAsString()
+                : "NETHERNET";
+
+        return switch (transport.toUpperCase(Locale.ROOT)) {
+            case "NETHERNET" -> new NetherNetServerInfo(name, address, address);
+            case "RAKNET" -> new BedrockServerInfo(name, address, address);
+            case "AUTO" -> new AutoServerInfo(name, address, address);
+            default -> throw new IllegalArgumentException("Unknown downstream transport: " + transport);
+        };
     }
 
     public void removeServer(String name) {

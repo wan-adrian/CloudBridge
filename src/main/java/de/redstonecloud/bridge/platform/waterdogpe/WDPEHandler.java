@@ -12,7 +12,6 @@ import dev.waterdog.waterdogpe.network.connection.handler.IReconnectHandler;
 import dev.waterdog.waterdogpe.network.connection.handler.ReconnectReason;
 import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
-import jline.internal.Nullable;
 import lombok.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -29,7 +28,7 @@ public class WDPEHandler implements IForcedHostHandler, IReconnectHandler, IJoin
     }
 
     @Override
-    public ServerInfo resolveForcedHost(@Nullable String domain, @NonNull ProxiedPlayer player) {
+    public ServerInfo resolveForcedHost(String domain, @NonNull ProxiedPlayer player) {
         return fetchServer(player);
     }
 
